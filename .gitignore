@@ -1,0 +1,8 @@
+# Виключення директорії node_modules
+node_modules/
+public/node_modules/
+
+# Виключення файлів конфігурації
+.env
+server/config/*.env
+
