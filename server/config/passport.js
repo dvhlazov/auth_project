@@ -19,16 +19,12 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                console.log('Google Profile is: ', profile);
-    
-                // Використання profile.id як унікального ідентифікатора
                 const userID = profile.id;
     
-                // Генерація токенів на основі userID
                 const access = generateAccessToken(userID);
                 const refresh = generateRefreshToken(userID);
     
-                // Підготовка об'єкта користувача
+                //user object before transfer
                 const user = {
                     userID,
                     userName: profile.displayName,
@@ -39,7 +35,7 @@ passport.use(
                     },
                 };
     
-                // Передача об'єкта користувача
+                // transfer data if success
                 done(null, user);
             } catch (error) {
                 done(error, null);
@@ -58,19 +54,22 @@ passport.use(
             },
             async(accessToken, refreshToken, profile, done) => {
                 try {
-                    console.log('Google Profile is: ', profile);
-    
-                    // Використання profile.id як унікального ідентифікатора
+                   
+                    const firstName = profile._json.first_name;
+                const lastName = profile._json.last_name;
+                const fullName = `${firstName} ${lastName}`;
+                    
                     const userID = profile.id;
+                    
+                    
     
-                    // Генерація токенів на основі userID
                     const access = generateAccessToken(userID);
                     const refresh = generateRefreshToken(userID);
     
-                    // Підготовка об'єкта користувача
+                  
                     const user = {
                         userID,
-                        userName: profile.displayName,
+                        userName: fullName, 
                         userEmail: profile.emails?.[0]?.value,
                         tokens: {
                             accessToken: access,
@@ -78,7 +77,7 @@ passport.use(
                         },
                     };
     
-                    // Передача об'єкта користувача
+                    
                     done(null, user);
                 } catch (error) {
                     done(error, null);
@@ -88,14 +87,12 @@ passport.use(
     );
 
 passport.serializeUser((user, done) => {
-    done(null, user.userID); // Серіалізуємо userID в сесію
+    done(null, user.userID); 
 });
 
 passport.deserializeUser((id, done) => {
-    // Логіка пошуку користувача за userID
-    // Якщо у вас база даних, наприклад:
-    // const user = await User.findById(id);
-    const user = { userID: id }; // Проста логіка для тестування
+    
+    const user = { userID: id }; 
     done(null, user);
 });
 

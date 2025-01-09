@@ -5,8 +5,11 @@ import routes from './routes/routes.js';
 import session from 'express-session';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import dbConnect from './bin/db.js';
+
 
 const server = express();
+dbConnect();
 
 server.use(
     session({
